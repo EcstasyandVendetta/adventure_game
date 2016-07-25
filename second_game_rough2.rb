@@ -82,6 +82,10 @@ class Player
     @hit_points > 0
   end
 
+  def dead?
+    !alive?
+  end
+
   def hurt(amount)
     @hit_points -= amount
   end
@@ -130,7 +134,7 @@ class Monster
 
   def initialize
     @hit_points = MAX_HIT_POINTS
-    @attack_power = 1
+    @attack_power = 35
   end
 
   def alive?
@@ -160,6 +164,10 @@ class Monster
       player.hurt(@attack_power)
       puts "The monster hits you for #{@attack_power} points."
       puts "Your hit points are #{player.hit_points}"
+      if player.dead?
+        puts "You is died."
+        break
+      end
     end
   end
 end
