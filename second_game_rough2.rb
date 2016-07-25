@@ -137,6 +137,10 @@ class Monster
     @hit_points > 0
   end
 
+  def dead?
+    !alive?
+  end
+
   def hurt(amount)
     @hit_points -= amount
   end
@@ -149,7 +153,10 @@ class Monster
     while player.alive?
       puts "You hit the monster for #{player.attack_power} points."
       hurt(player.attack_power)
-      break unless alive?
+      if dead?
+        puts "Monster is dead! REJOICE!!"
+        break
+      end
       player.hurt(@attack_power)
       puts "The monster hits you for #{@attack_power} points."
       puts "Your hit points are #{player.hit_points}"
