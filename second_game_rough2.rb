@@ -152,7 +152,7 @@ class Monster
       break unless alive?
       player.hurt(@attack_power)
       puts "The monster hits you for #{@attack_power} points."
-      puts "Your hit points are #{@player.hit_points}"
+      puts "Your hit points are #{player.hit_points}"
     end
   end
 end
