@@ -2,7 +2,7 @@ Dir["lib/**.*"].each { |file| require_relative file}
 
 class Game
   ACTIONS = [
-    :north, :east, :south, :west, :look, :fight, :take, :print_status, :exit
+    :north, :east, :south, :west, :look, :fight, :take, :print_status, :quit
   ]
 
 def initialize
@@ -60,20 +60,21 @@ def take_action(action)
     @current_room.interact(@player)
   when :status
     @player.print_status
-  when :exit
+  when :quit
+    puts "Quitters never win"
     @player.hit_points = 0
   end
 end
 end
 
 class Player
-  attr_accessor :hit_points, :attack_power
+  attr_accessor :hit_points, :attack_power, :max_hit_points
   attr_accessor :x_coord, :y_coord
 
-  MAX_HIT_POINTS = 100
 
   def initialize
-    @hit_points         = MAX_HIT_POINTS
+    @max_hit_points = 100
+    @hit_points         = @max_hit_points
     @attack_power       = 1
     @x_coord, @y_coord  = 0, 0
   end
@@ -92,12 +93,12 @@ class Player
 
   def heal(amount)
     @hit_points += amount
-    @hit_points = [@hit_points, MAX_HIT_POINTS].min
+    @hit_points = [@hit_points, @max_hit_points].min
   end
 
   def print_status
     puts "*" * 80
-    puts "HP: #{@hit_points}/#{MAX_HIT_POINTS}"
+    puts "HP: #{@hit_points}/#{@max_hit_points}"
     puts "AP: #{@attack_power}"
     puts "*" * 80
   end
@@ -116,6 +117,13 @@ class Item
     case @type
     when :potion
       puts "You pick up #{self}."
+      if player.hit_points < player.max_hit_points
+        healing = 5 + rand(15)
+        player.hit_points += healing
+        puts "The potion heals you for #{healing}. Your hit points are #{player.hit_points}. You feel better."
+      else
+        puts "You are perfectly healthy."
+      end
     when :sword
       puts "You pick up #{self}."
       player.attack_power += 1
@@ -134,7 +142,6 @@ class Monster
 
   def initialize
     @hit_points = MAX_HIT_POINTS
-    @attack_power = 35
   end
 
   def alive?
@@ -156,12 +163,12 @@ class Monster
   def interact(player)
     while player.alive?
       puts "You hit the monster for #{player.attack_power} points."
-      hurt(player.attack_power)
+      hurt(player.attack_power = 1 + rand(4))
       if dead?
         puts "Monster is dead! REJOICE!!"
         break
       end
-      player.hurt(@attack_power)
+      player.hurt(@attack_power = rand(25))
       puts "The monster hits you for #{@attack_power} points."
       puts "Your hit points are #{player.hit_points}"
       if player.dead?
