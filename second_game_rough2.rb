@@ -31,7 +31,7 @@ def game_running
 end
 
 def take_player_input
-  print "Whatchoo gonna do, bitch?"
+  print "Whats't wouldst thou doest?"
   gets.chomp.to_sym
 end
 
@@ -142,7 +142,7 @@ class Monster
   end
 
   def to_s
-    "a horrible monster! IT'S MADE OUT OF DICKS, ARRRRGH!"
+    "an angry monster! It has the body of an iguana, the head of a rhinoceros, the teeth of a shark, and the heart of a venture capitalist!"
   end
 
   def interact(player)
@@ -202,7 +202,7 @@ class World
     if entity.x_coord <= 0
       puts "You can't go that way"
     else
-      puts "You go west."
+      puts "Go west, young man."
       entity.x_coord -= 1 
     end
   end
